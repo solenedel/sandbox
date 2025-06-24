@@ -65,11 +65,6 @@ export const useFetchDogData = () => {
   const handleGetDogBreedImplementation = async <T extends string | string[]>(
     dogUrl: T
   ): Promise<void> => {
-    // console.log('Function called with dogUrl:', dogUrl); // Add this to see what's being passed
-    // console.log('Is Array?', Array.isArray(dogUrl)); // Add this to check the array condition
-    // console.log('Length:', Array.isArray(dogUrl) ? dogUrl.length : 'not array'); // Add this to check length condition
-    // console.log('dogUrl instanceof Array:', dogUrl instanceof Array);
-
     try {
       // array case
       if (Array.isArray(dogUrl) && dogUrl.length > 0) {
@@ -77,9 +72,7 @@ export const useFetchDogData = () => {
           axios.get(`/api/dog-breed?dogUrl=${url}`)
         );
         const responses = await Promise.all(dogBreedPromises);
-        console.log('responses:🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍', responses);
         const dogBreeds = responses.map((resp) => resp.data.dogBreed);
-        console.log('dogBreedssss: 🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍', dogBreeds);
         setMultipleDogBreeds(dogBreeds);
       } else {
         // string case
