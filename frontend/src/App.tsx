@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import { useFetchDogData } from './hooks/useFetchDogData';
 
-// console.log('🌍🌍🌍🌍 dogImage', dogImage);
-
 function App() {
   const [count, setCount] = useState<number | null>(null);
 

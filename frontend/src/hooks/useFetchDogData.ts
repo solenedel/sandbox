@@ -60,20 +60,25 @@ export const useFetchDogData = () => {
   // handleGetDogBreed ---------------------------------------------------------
 
   // this function can take in EITHER a single dog url string OR an array of dog urls
-  // good TS practice here
-
   const handleGetDogBreed = async <T extends string | string[]>(
     dogUrl: T
   ): Promise<void> => {
     try {
       // array case
       if (Array.isArray(dogUrl) && dogUrl.length > 0) {
-        // ????
+        const dogBreedPromises = dogUrl.map((url: string) =>
+          axios.get(`/api/dog-breed?dogUrl=${url}`)
+        );
+        const responses = await Promise.all(dogBreedPromises);
+        console.log('responses:🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍', responses);
+        const dogBreeds = responses.map((resp) => resp.data);
+        console.log('dogBreeds: 🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍', dogBreeds);
+        setMultipleDogBreeds(dogBreeds);
       } else {
         // string case
         const response = await axios.get(`/api/dog-breed?dogUrl=${dogUrl}`);
         const dogBreed: string = response.data;
-        console.log('dog breed:', dogBreed);
+        console.log('dog breed: 🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍', dogBreed);
         setSingleDogBreed(dogBreed);
       }
     } catch (error) {
@@ -95,5 +100,7 @@ export const useFetchDogData = () => {
     singleDogUrl,
     multipleDogs,
     status,
+    singleDogBreed,
+    multipleDogBreeds,
   };
 };
