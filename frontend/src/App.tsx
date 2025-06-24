@@ -32,11 +32,13 @@ function App() {
     if (singleDogUrl) {
       handleGetDogBreed(singleDogUrl);
     } else if (multipleDogs.length > 0) {
+      console.log('multipleDogs before passing:', multipleDogs);
+      console.log('is array before passing:', Array.isArray(multipleDogs));
+
       handleGetDogBreed(multipleDogs);
     }
   }, [singleDogUrl, multipleDogs, handleGetDogBreed]);
   // note: useEffect cleanup is unnecessary here because it is a synchronous operation
-  // note: useCallback is also unnecessary because the function is not passed as a dependency and is simple
 
   //useEffect: keep track of status -------------------------------------------------------------
 
@@ -107,13 +109,20 @@ function App() {
             gap: '10px',
           }}>
           {multipleDogs.map((url: string, index: number) => (
-            <img
-              loading="lazy"
-              src={url}
-              key={url}
-              alt={`Random dog ${index + 1}`}
-              width={200}
-            />
+            <div key={url}>
+              <img
+                loading="lazy"
+                src={url}
+                alt={`Random dog ${index + 1}`}
+                width={200}
+              />
+              {/* Add type check and null check */}
+              {Array.isArray(multipleDogBreeds) &&
+                multipleDogBreeds[index] &&
+                typeof multipleDogBreeds[index] === 'string' && (
+                  <p>{multipleDogBreeds[index]}</p>
+                )}
+            </div>
           ))}
         </div>
       ) : null}

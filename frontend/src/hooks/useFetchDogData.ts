@@ -16,6 +16,7 @@ export const useFetchDogData = () => {
 
   const handleGetSingleDog = async (): Promise<void> => {
     setStatus({ ...status, singleDogStatus: 'loading' });
+    setSingleDogBreed(null);
     try {
       // fetch from backend
       const response = await axios.get(`/api/random-dog`);
@@ -37,6 +38,7 @@ export const useFetchDogData = () => {
 
   const handleGetMultipleDogs = async (count: number): Promise<void> => {
     setStatus({ ...status, multipleDogsStatus: 'loading' });
+    setMultipleDogBreeds([]);
 
     try {
       const response = await axios.get(`/api/multiple-dogs?count=${count}`);
@@ -63,6 +65,11 @@ export const useFetchDogData = () => {
   const handleGetDogBreedImplementation = async <T extends string | string[]>(
     dogUrl: T
   ): Promise<void> => {
+    // console.log('Function called with dogUrl:', dogUrl); // Add this to see what's being passed
+    // console.log('Is Array?', Array.isArray(dogUrl)); // Add this to check the array condition
+    // console.log('Length:', Array.isArray(dogUrl) ? dogUrl.length : 'not array'); // Add this to check length condition
+    // console.log('dogUrl instanceof Array:', dogUrl instanceof Array);
+
     try {
       // array case
       if (Array.isArray(dogUrl) && dogUrl.length > 0) {
@@ -71,14 +78,13 @@ export const useFetchDogData = () => {
         );
         const responses = await Promise.all(dogBreedPromises);
         console.log('responses:🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍', responses);
-        const dogBreeds = responses.map((resp) => resp.data);
-        console.log('dogBreeds: 🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍', dogBreeds);
+        const dogBreeds = responses.map((resp) => resp.data.dogBreed);
+        console.log('dogBreedssss: 🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍', dogBreeds);
         setMultipleDogBreeds(dogBreeds);
       } else {
         // string case
         const response = await axios.get(`/api/dog-breed?dogUrl=${dogUrl}`);
-        const dogBreed: string = response.data;
-        console.log('dog breed: 🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍🌍', dogBreed);
+        const dogBreed: string = response.data.dogBreed;
         setSingleDogBreed(dogBreed);
       }
     } catch (error) {
