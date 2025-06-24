@@ -21,6 +21,7 @@ function App() {
   const [singleDogUrl, setSingleDogUrl] = useState<string | null>(null);
   const [singleDogBreed, setSingleDogBreed] = useState<string | null>(null);
   const [multipleDogs, setMultipleDogs] = useState<string[]>([]);
+  const [count, setCount] = useState<number | null>(null);
   const [status, setStatus] = useState<Status>({
     singleDogStatus: 'idle',
     multipleDogsStatus: 'idle',
@@ -57,8 +58,6 @@ function App() {
       const response = await axios.get(`/api/multiple-dogs?count=${count}`);
       const multipleDogs: string[] = response.data.message;
 
-      console.log('🌍🌍🌍🌍 multipleDogs', multipleDogs);
-
       setMultipleDogs(multipleDogs);
       setStatus({ ...status, multipleDogsStatus: 'success' });
     } catch (error) {
@@ -69,6 +68,12 @@ function App() {
       }
       setStatus({ ...status, multipleDogsStatus: 'error' });
     }
+  };
+
+  // handleCountInput -------------------------------------------------------------
+
+  const handleCountInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setCount(Number(e.target.value));
   };
 
   // useEffect: extract dog breed form url -------------------------------------------------------------
@@ -103,7 +108,7 @@ function App() {
   return (
     <>
       {/* GET SINGLE DOG SECTION */}
-      <section>
+      {/* <section>
         <h2>Get one random dog</h2>
         <button
           disabled={status.singleDogStatus === 'loading'}
@@ -130,15 +135,23 @@ function App() {
         </>
       ) : (
         <p>No dog selected yet.</p>
-      )}
+      )} */}
       {/* MULTIPLE DOGS SECTION */}
       <section>
         <h2>Get multiple dogs</h2>
         <div>
-          <input type="number" min={1} max={10} />
+          <label htmlFor="count">Number of dogs: </label>
+          <input
+            id="count"
+            type="number"
+            value={count ?? ''}
+            onChange={handleCountInput}
+            min={1}
+            max={10}
+          />
           <button
             disabled={status.multipleDogsStatus === 'loading'}
-            onClick={() => handleGetMultipleDogs(3)}>
+            onClick={() => count && handleGetMultipleDogs(count)}>
             Get dogs
           </button>
         </div>
@@ -146,6 +159,7 @@ function App() {
       {multipleDogs.length ? (
         <div
           style={{
+            marginTop: '20px',
             display: 'flex',
             flexWrap: 'wrap',
             alignItems: 'center',
