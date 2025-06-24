@@ -52,3 +52,21 @@ export const getMultipleDogs = async (
     throw new Error('Failed to fetch multiple dogs');
   }
 };
+
+// 🔵 getDogBreed --------------------------------------------------------
+
+export const getDogBreed = (dogUrl: string): string => {
+  const breed = dogUrl.split('/');
+  const breedName = breed[4];
+
+  if (breedName) {
+    const formattedBreedName = breedName.replace('-', ' ');
+    return formattedBreedName;
+  }
+  return 'No dog breed found.';
+
+  // if we use this, we will need error handling in frontend
+  //    if (!breedName) {
+  //    throw new Error('Could not extract breed from URL');
+  //  }
+};

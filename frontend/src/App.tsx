@@ -1,79 +1,29 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import './App.css';
-
-// types ---------------------------------------------------------------------
-
-// interface Dog {
-//   message: string;
-// }
-
-type statusOptions = 'idle' | 'loading' | 'success' | 'error';
-
-interface Status {
-  singleDogStatus: statusOptions;
-  multipleDogsStatus: statusOptions;
-}
+import { useFetchDogData } from './hooks/useFetchDogData';
 
 // console.log('🌍🌍🌍🌍 dogImage', dogImage);
 
 function App() {
-  const [singleDogUrl, setSingleDogUrl] = useState<string | null>(null);
   const [singleDogBreed, setSingleDogBreed] = useState<string | null>(null);
-  const [multipleDogs, setMultipleDogs] = useState<string[]>([]);
   const [count, setCount] = useState<number | null>(null);
-  const [status, setStatus] = useState<Status>({
-    singleDogStatus: 'idle',
-    multipleDogsStatus: 'idle',
-  });
 
-  // handleGetSingleDog ---------------------------------------------------------
-
-  // to do - turn into custom hook
-  const handleGetSingleDog = async (): Promise<void> => {
-    setStatus({ ...status, singleDogStatus: 'loading' });
-    try {
-      // fetch from backend
-      const response = await axios.get(`/api/random-dog`);
-      const dogImage: string = response.data.message;
-
-      setSingleDogUrl(dogImage);
-      setStatus({ ...status, singleDogStatus: 'success' });
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error('Axios error fetching single dog:', error.response?.data);
-      } else {
-        console.error('Unexpected error fetching single dog:', error);
-      }
-      setStatus({ ...status, singleDogStatus: 'error' });
-    }
-  };
-
-  // handleGetMultipleDogs ---------------------------------------------------------
-
-  const handleGetMultipleDogs = async (count: number): Promise<void> => {
-    setStatus({ ...status, multipleDogsStatus: 'loading' });
-
-    try {
-      const response = await axios.get(`/api/multiple-dogs?count=${count}`);
-      const multipleDogs: string[] = response.data.message;
-
-      setMultipleDogs(multipleDogs);
-      setStatus({ ...status, multipleDogsStatus: 'success' });
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error('Axios error fetching single dog:', error.response?.data);
-      } else {
-        console.error('Unexpected error fetching single dog:', error);
-      }
-      setStatus({ ...status, multipleDogsStatus: 'error' });
-    }
-  };
+  const {
+    handleGetSingleDog,
+    handleGetMultipleDogs,
+    singleDogUrl,
+    multipleDogs,
+    status,
+  } = useFetchDogData();
 
   // handleCountInput -------------------------------------------------------------
 
   const handleCountInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setCount(Number(e.target.value));
+    const value = Number(e.target.value);
+
+    if (value >= 1 && value <= 10) {
+      setCount(value);
+    }
   };
 
   // useEffect: extract dog breed form url -------------------------------------------------------------
@@ -108,7 +58,7 @@ function App() {
   return (
     <>
       {/* GET SINGLE DOG SECTION */}
-      {/* <section>
+      <section>
         <h2>Get one random dog</h2>
         <button
           disabled={status.singleDogStatus === 'loading'}
@@ -130,12 +80,12 @@ function App() {
       )}
       {singleDogUrl ? (
         <>
-          <img src={singleDogUrl} loading="lazy" alt="Random dog" width={400} />
+          <img src={singleDogUrl} loading="lazy" alt="Random dog" width={200} />
           {singleDogBreed && <p>{singleDogBreed}</p>}
         </>
       ) : (
         <p>No dog selected yet.</p>
-      )} */}
+      )}
       {/* MULTIPLE DOGS SECTION */}
       <section>
         <h2>Get multiple dogs</h2>

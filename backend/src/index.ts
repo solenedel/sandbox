@@ -2,7 +2,11 @@ import express from 'express';
 import { Router, Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { getRandomDog, getMultipleDogs } from './services/dogService';
+import {
+  getRandomDog,
+  getMultipleDogs,
+  getDogBreed,
+} from './services/dogService';
 
 // SERVER SETUP --------------------------------------------------------------
 
@@ -59,9 +63,25 @@ const getMultipleDogsHandler = async (req: Request, res: Response) => {
   }
 };
 
-// route for getMultipleDogs: /api/multiple-dogs
+// route for getMultipleDogs: /api/multiple-dogs?count=X
 router.get(`/multiple-dogs`, getMultipleDogsHandler);
 
+// 🔵 get dog breed --------------------------------------------------------
+
+// route handler for getDogBreed
+const getDogBreedHandler = async (req: Request, res: Response) => {
+  const dogUrl = req.query.dogUrl as string;
+
+  try {
+    const dogBreed = getDogBreed(dogUrl);
+    res.json({ dogBreed });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch dog breed' });
+  }
+};
+
+// route for getDogBreed: /api/dog-breed?dogUrl=X
+router.get(`/dog-breed`, getDogBreedHandler);
 // ----------------------------------------------------------------------------
 
 export default router;
