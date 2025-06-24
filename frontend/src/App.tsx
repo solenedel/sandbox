@@ -5,7 +5,6 @@ import { useFetchDogData } from './hooks/useFetchDogData';
 // console.log('🌍🌍🌍🌍 dogImage', dogImage);
 
 function App() {
-  const [singleDogBreed, setSingleDogBreed] = useState<string | null>(null);
   const [count, setCount] = useState<number | null>(null);
 
   const {
@@ -26,7 +25,7 @@ function App() {
     }
   };
 
-  // useEffect: extract dog breed form url -------------------------------------------------------------
+  // useEffect: extract dog breed from url -------------------------------------------------------------
 
   useEffect(() => {
     // extract breed from url
