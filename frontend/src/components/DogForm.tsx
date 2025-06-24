@@ -1,11 +1,14 @@
 import { useState } from 'react';
 
-interface DogData {
+// types -------------------------------------------------------------
+
+export interface DogData {
   name: string;
   breed: string;
   age: number;
 }
 
+// component -------------------------------------------------------------
 function DogForm() {
   const [dogData, setDogData] = useState<DogData>({
     name: '',
@@ -23,10 +26,12 @@ function DogForm() {
     }));
   };
 
-  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  // };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // add to context
+  };
 
+  // render -------------------------------------------------------------
   return (
     <form
       style={{
@@ -35,8 +40,8 @@ function DogForm() {
         gap: '1rem',
       }}
       aria-label="Add new dog"
-      action="submit
-    ">
+      action="submit"
+      onSubmit={handleSubmit}>
       <label htmlFor="dog-name">Dog name</label>
       <input
         onChange={handleChange}
