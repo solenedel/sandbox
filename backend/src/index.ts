@@ -4,6 +4,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { getRandomDog, getMultipleDogs } from './services/dogService';
 
+// SERVER SETUP --------------------------------------------------------------
+
 dotenv.config();
 
 const app = express();
@@ -26,9 +28,9 @@ app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
 });
 
-// ------------------------------ ROUTES ---------------------------------
+// ------------------------------ ROUTES --------------------------------------
 
-// 🔵 get random dog --------------------------------------------------------
+// 🔵 get random dog ----------------------------------------------------------
 
 // route handler for getRandomDog
 const getRandomDogHandler = async (req: Request, res: Response) => {
@@ -43,7 +45,7 @@ const getRandomDogHandler = async (req: Request, res: Response) => {
 // route for getRandomDog: /api/random-dog
 router.get('/random-dog', getRandomDogHandler);
 
-// 🔵 get multiple dogs -----------------------------------------------------
+// 🔵 get multiple dogs --------------------------------------------------------
 
 // route handler for getMultipleDogs
 const getMultipleDogsHandler = async (req: Request, res: Response) => {
@@ -60,6 +62,6 @@ const getMultipleDogsHandler = async (req: Request, res: Response) => {
 // route for getMultipleDogs: /api/multiple-dogs
 router.get(`/multiple-dogs`, getMultipleDogsHandler);
 
-// -------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 export default router;
