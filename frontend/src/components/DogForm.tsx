@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useDogContext } from '../context/DogContext';
 
 // types -------------------------------------------------------------
 
@@ -10,6 +11,7 @@ export interface DogData {
 
 // component -------------------------------------------------------------
 function DogForm() {
+  const { addDog, dogs } = useDogContext();
   const [dogData, setDogData] = useState<DogData>({
     name: '',
     breed: '',
@@ -28,8 +30,15 @@ function DogForm() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // add to context
+    addDog(dogData);
+    // reset form
+    setDogData({ name: '', breed: '', age: 0 });
   };
+
+  // useEffect -------------------------------------------------------------
+  useEffect(() => {
+    console.log('DOGZZZZ========', dogs);
+  }, [dogs]);
 
   // render -------------------------------------------------------------
   return (
