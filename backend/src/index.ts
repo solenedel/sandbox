@@ -2,7 +2,7 @@ import express from 'express';
 import { Router, Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { getRandomDog } from './services/dogService';
+import { getRandomDog, getMultipleDogs } from './services/dogService';
 
 dotenv.config();
 
@@ -26,9 +26,9 @@ app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
 });
 
-// ------------------------------ ROUTES ------------------------------
+// ------------------------------ ROUTES ---------------------------------
 
-// get random dog --------------------------------------------------------
+// 🔵 get random dog --------------------------------------------------------
 
 // route handler for getRandomDog
 const getRandomDogHandler = async (req: Request, res: Response) => {
@@ -43,11 +43,22 @@ const getRandomDogHandler = async (req: Request, res: Response) => {
 // route for getRandomDog: /api/random-dog
 router.get('/random-dog', getRandomDogHandler);
 
-// get multiple dogs -----------------------------------------------------
+// 🔵 get multiple dogs -----------------------------------------------------
 
-// get multiple dogs from dogService API
-// router.get('/multiple-dogs', getMultipleDogs);
-// this one should take in a number param for the number of dogs to get (between 1 and 10)
+// route handler for getMultipleDogs
+const getMultipleDogsHandler = async (req: Request, res: Response) => {
+  // turn string query param into number
+  const count = Number(req.query.count);
+  try {
+    const multipleDogs = await getMultipleDogs(count);
+    res.json(multipleDogs); // no explicit return needed when using res.json
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch multiple dogs' });
+  }
+};
+
+// route for getMultipleDogs: /api/multiple-dogs
+router.get(`/multiple-dogs`, getMultipleDogsHandler);
 
 // -------------------------------------------------------------------
 

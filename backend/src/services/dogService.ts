@@ -2,16 +2,21 @@ import axios from 'axios';
 
 // INTERFACES ------------------------------------------------------------
 
-interface DogApiResponse {
+interface SingleDogApiResponse {
   message: string;
+  status: string;
+}
+
+interface MultipleDogsApiResponse {
+  message: string[];
   status: string;
 }
 // SERVICE FUNCTIONS ----------------------------------------------------
 
-// getRandomDog ----------------------------------------------------------
+// 🔵 getRandomDog ----------------------------------------------------------
 // returns a single random dog image
 
-export const getRandomDog = async (): Promise<DogApiResponse> => {
+export const getRandomDog = async (): Promise<SingleDogApiResponse> => {
   try {
     const response = await axios.get('https://dog.ceo/api/breeds/image/random');
     return response.data;
@@ -25,4 +30,25 @@ export const getRandomDog = async (): Promise<DogApiResponse> => {
   }
 };
 
-// getMultipleDogs --------------------------------------------------------
+// 🔵 getMultipleDogs --------------------------------------------------------
+
+export const getMultipleDogs = async (
+  count: number
+): Promise<MultipleDogsApiResponse> => {
+  try {
+    const response = await axios.get(
+      `https://dog.ceo/api/breeds/image/random/${count}`
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error(
+        'Axios error fetching multiple dogs:',
+        error.response?.data
+      );
+    } else {
+      console.error('Unexpected error fetching multiple dogs:', error);
+    }
+    throw new Error('Failed to fetch multiple dogs');
+  }
+};
