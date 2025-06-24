@@ -1,5 +1,5 @@
 import type { Status } from '../types/types';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import axios from 'axios';
 
 export const useFetchDogData = () => {
@@ -60,7 +60,7 @@ export const useFetchDogData = () => {
   // handleGetDogBreed ---------------------------------------------------------
 
   // this function can take in EITHER a single dog url string OR an array of dog urls
-  const handleGetDogBreed = async <T extends string | string[]>(
+  const handleGetDogBreedImplementation = async <T extends string | string[]>(
     dogUrl: T
   ): Promise<void> => {
     try {
@@ -92,6 +92,11 @@ export const useFetchDogData = () => {
       }
     }
   };
+
+  const handleGetDogBreed = useCallback(handleGetDogBreedImplementation, [
+    setSingleDogBreed,
+    setMultipleDogBreeds,
+  ]);
 
   return {
     handleGetSingleDog,

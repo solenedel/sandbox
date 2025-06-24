@@ -11,6 +11,9 @@ function App() {
     singleDogUrl,
     multipleDogs,
     status,
+    handleGetDogBreed,
+    singleDogBreed,
+    multipleDogBreeds,
   } = useFetchDogData();
 
   // handleCountInput -------------------------------------------------------------
@@ -23,24 +26,15 @@ function App() {
     }
   };
 
-  // useEffect: extract dog breed from url -------------------------------------------------------------
+  // useEffect: fetch dog breeds from hook -------------------------------------------------------------
 
   useEffect(() => {
-    // extract breed from url
-    const handleGetDogBreed = (): void => {
-      const breed = singleDogUrl?.split('/');
-      const breedName = breed?.[4];
-
-      if (breedName) {
-        const formattedBreedName = breedName.replace('-', ' ');
-
-        setSingleDogBreed(formattedBreedName);
-      }
-    };
     if (singleDogUrl) {
-      handleGetDogBreed();
+      handleGetDogBreed(singleDogUrl);
+    } else if (multipleDogs.length > 0) {
+      handleGetDogBreed(multipleDogs);
     }
-  }, [singleDogUrl]);
+  }, [singleDogUrl, multipleDogs, handleGetDogBreed]);
   // note: useEffect cleanup is unnecessary here because it is a synchronous operation
   // note: useCallback is also unnecessary because the function is not passed as a dependency and is simple
 
