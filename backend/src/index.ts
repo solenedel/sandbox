@@ -1,7 +1,8 @@
 import express from 'express';
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { getRandomDog } from './services/dogService';
 
 dotenv.config();
 
@@ -27,11 +28,25 @@ app.listen(PORT, () => {
 
 // ------------------------------ ROUTES ------------------------------
 
-// get one random dog from dogService API
-router.get('/random-dog', getRandomDog);
+// get random dog --------------------------------------------------------
+
+// route handler for getRandomDog
+const getRandomDogHandler = async (req: Request, res: Response) => {
+  try {
+    const randomDog = await getRandomDog();
+    res.json(randomDog); // no explicit return needed when using res.json
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch random dog' });
+  }
+};
+
+// route for getRandomDog: /api/random-dog
+router.get('/random-dog', getRandomDogHandler);
+
+// get multiple dogs -----------------------------------------------------
 
 // get multiple dogs from dogService API
-router.get('/multiple-dogs', getMultipleDogs);
+// router.get('/multiple-dogs', getMultipleDogs);
 // this one should take in a number param for the number of dogs to get (between 1 and 10)
 
 // -------------------------------------------------------------------
