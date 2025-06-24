@@ -4,9 +4,9 @@ import './App.css';
 
 // types ---------------------------------------------------------------------
 
-interface Dog {
-  message: string;
-}
+// interface Dog {
+//   message: string;
+// }
 
 type statusOptions = 'idle' | 'loading' | 'success' | 'error';
 
@@ -20,7 +20,7 @@ interface Status {
 function App() {
   const [singleDogUrl, setSingleDogUrl] = useState<string | null>(null);
   const [singleDogBreed, setSingleDogBreed] = useState<string | null>(null);
-  const [multipleDogs, setMultipleDogs] = useState<Dog[]>([]);
+  const [multipleDogs, setMultipleDogs] = useState<string[]>([]);
   const [status, setStatus] = useState<Status>({
     singleDogStatus: 'idle',
     multipleDogsStatus: 'idle',
@@ -34,9 +34,9 @@ function App() {
     try {
       // fetch from backend
       const response = await axios.get(`/api/random-dog`);
-      const dogImage: Dog = response.data;
+      const dogImage: string = response.data.message;
 
-      setSingleDogUrl(dogImage.message);
+      setSingleDogUrl(dogImage);
       setStatus({ ...status, singleDogStatus: 'success' });
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -55,7 +55,7 @@ function App() {
 
     try {
       const response = await axios.get(`/api/multiple-dogs?count=${count}`);
-      const multipleDogs: Dog[] = response.data.message;
+      const multipleDogs: string[] = response.data.message;
 
       console.log('🌍🌍🌍🌍 multipleDogs', multipleDogs);
 
@@ -94,9 +94,9 @@ function App() {
 
   //useEffect: keep track of status -------------------------------------------------------------
 
-  useEffect(() => {
-    console.log('🌍🌍🌍🌍 status', status);
-  }, [status]);
+  // useEffect(() => {
+  //   console.log('🌍🌍🌍🌍 status', status);
+  // }, [status]);
 
   // RENDER --------------------------------------------------------------------------------------
 
@@ -143,6 +143,25 @@ function App() {
           </button>
         </div>
       </section>
+      {multipleDogs.length ? (
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            gap: '10px',
+          }}>
+          {multipleDogs.map((url: string, index: number) => (
+            <img
+              loading="lazy"
+              src={url}
+              key={url}
+              alt={`Random dog ${index + 1}`}
+              width={200}
+            />
+          ))}
+        </div>
+      ) : null}
     </>
   );
 }
