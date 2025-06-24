@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import DogGallery from './pages/DogGallery';
-// import { YourDogs } from './pages/YourDogs';
+import YourDogs from './pages/YourDogs';
 import './App.css';
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<DogGallery />} />
-          {/* <Route path="/your-dogs" element={<YourDogs />} /> */}
+          <Route path="/your-dogs" element={<YourDogs />} />
         </Routes>
       </main>
     </BrowserRouter>
